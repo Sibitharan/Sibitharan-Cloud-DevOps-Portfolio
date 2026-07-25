@@ -23,7 +23,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::113904309719:role/SibitharanPortfolioGitHubActionsRole
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ap-south-1
 
       - name: Deploy portfolio to S3
