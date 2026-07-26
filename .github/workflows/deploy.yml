@@ -1,10 +1,6 @@
-name: Deploy Portfolio to AWS
+name: Debug GitHub OIDC
 
 on:
-  push:
-    branches:
-      - main
-
   workflow_dispatch:
 
 permissions:
@@ -12,34 +8,23 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
-    name: Deploy to S3 and CloudFront
+  debug-oidc:
+    name: Debug GitHub OIDC Token
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::113904309719:role/SibitharanPortfolioGitHubActionsRole
-          aws-region: ap-south-1
-
-      - name: Verify AWS Identity
+      - name: Get OIDC token claims
         run: |
-          aws sts get-caller-identity
+          echo "Requesting GitHub OIDC token..."
 
-      - name: Deploy portfolio to S3
-        run: |
-          aws s3 sync . s3://sibitharan-cloud-devops-portfolio \
-            --delete \
-            --exclude ".git/*" \
-            --exclude ".github/*"
+          TOKEN=$(curl -sS \
+            -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=sts.amazonaws.com" \
+            | jq -r '.value')
 
-      - name: Invalidate CloudFront cache
-        run: |
-          aws cloudfront create-invalidation \
-            --distribution-id E3KWR2VUQHRJGV \
-            --paths "/*"
+          echo "OIDC token received."
+
+          echo "$TOKEN" | cut -d '.' -f2 | base64 -d 2>/dev/null | jq .
