@@ -87,22 +87,60 @@ counters.forEach(counter => counterObserver.observe(counter));
 /* =========================
    CONTACT FORM
 ========================= */
+
 const contactForm = document.querySelector("#contactForm");
 
 if (contactForm) {
-    contactForm.addEventListener("submit", event => {
+    contactForm.addEventListener("submit", async event => {
         event.preventDefault();
+
+        const submitButton = contactForm.querySelector(
+            'button[type="submit"]'
+        );
+
+        const originalButtonText = submitButton.innerHTML;
 
         const name = document.querySelector("#name").value.trim();
 
-        alert(
-            `Thanks ${name}! The contact form is ready to connect with a backend/email service.`
-        );
+        // Show sending status
+        submitButton.disabled = true;
+        submitButton.innerHTML = `
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Sending...
+        `;
 
-        contactForm.reset();
+        try {
+            const response = await fetch(contactForm.action, {
+                method: "POST",
+                body: new FormData(contactForm),
+                headers: {
+                    Accept: "application/json"
+                }
+            });
+
+            if (response.ok) {
+                alert(
+                    `Thanks ${name}! Your message has been sent successfully.`
+                );
+
+                contactForm.reset();
+            } else {
+                alert(
+                    "Sorry, something went wrong. Please try again later."
+                );
+            }
+
+        } catch (error) {
+            alert(
+                "Unable to send your message. Please check your internet connection and try again."
+            );
+        }
+
+        // Restore button
+        submitButton.disabled = false;
+        submitButton.innerHTML = originalButtonText;
     });
 }
-
 /* =========================
    NAVBAR SCROLL
 ========================= */
