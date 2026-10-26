@@ -3,7 +3,7 @@
 ========================================================= */
 
 html {
-    background: #2270e6;
+    background: #0D1117;
     scroll-behavior: smooth;
 }
 
@@ -13,9 +13,9 @@ body {
 
     min-width: 320px;
 
-    background: #4d8ceb;
+    background: #0D1117;
 
-    color: #0088ff;
+    color: #E6EDF3;
 
     overflow-x: hidden;
 }
@@ -35,7 +35,7 @@ body {
     width: 100vw;
     height: 100vh;
 
-    background: #417ad1;
+    background: #0D1117;
 
     overflow: hidden;
 
@@ -192,7 +192,7 @@ body {
     z-index: 100;
 
     background:
-        rgba(13, 17, 23, 0.72);
+        rgba(60, 113, 194, 0.72);
 
     backdrop-filter:
         blur(12px);
