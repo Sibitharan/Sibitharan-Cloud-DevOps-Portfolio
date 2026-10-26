@@ -33,7 +33,7 @@ The project demonstrates how modern DevOps practices can be applied to a real-wo
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Architecture & flow
 
 ```text
 Developer
